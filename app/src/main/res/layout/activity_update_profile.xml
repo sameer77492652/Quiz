@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/clMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:id="@+id/llInfo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/appBar"
+                android:gravity="top"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="UPDATE PROFILE"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:padding="10dp"
+                    android:textStyle="bold"
+                    />
+
+                <EditText
+                    android:id="@+id/etName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="@string/activity_sign_up_hint_full_name"
+                    android:inputType="textPersonName"
+                    android:lines="1"
+                    android:padding="@dimen/edittext_padding"
+                    android:textColorHint="@color/hint_text_color"
+                    android:textSize="@dimen/text_size_medium"/>
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:editable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:clickable="false"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="@string/activity_sign_in_hint_email"
+                    android:inputType="textEmailAddress"
+                    android:lines="1"
+                    android:padding="@dimen/edittext_padding"
+                    android:textColorHint="@color/hint_text_color"
+                    android:textSize="@dimen/text_size_medium"/>
+
+                <EditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="@string/activity_sign_up_mobile"
+                    android:inputType="number"
+                    android:lines="1"
+                    android:maxLength="15"
+                    android:padding="@dimen/edittext_padding"
+                    android:textColorHint="@color/hint_text_color"
+                    android:textSize="@dimen/text_size_medium"/>
+
+                <TextView
+                    android:id="@+id/tvDob"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:background="@drawable/edit_text_background"
+                    android:hint="Date Of Birth"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:padding="@dimen/edittext_padding"
+                    android:textColorHint="@color/hint_text_color"
+                    android:textSize="@dimen/text_size_medium"/>
+
+                <TextView
+                    android:id="@+id/tvGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:text="Gender"
+                    android:visibility="visible"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_large"/>
+
+
+                <RadioGroup
+                    android:id="@+id/rgGender"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:orientation="horizontal"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/rbMale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Male" />
+
+
+                    <RadioButton
+                        android:id="@+id/rbFemale"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/radioGroup1"
+                        android:layout_marginLeft="20dp"
+                        android:text="Female" />
+
+
+                </RadioGroup>
+
+                <TextView
+                    android:id="@+id/tvProfile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:text="Select Profile Picture"
+                    android:visibility="visible"
+                    android:textColor="@color/text_color_black"
+                    android:textSize="@dimen/text_size_large"/>
+
+
+                <ImageView
+                    android:id="@+id/ivProfile"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@mipmap/ic_launcher"
+                    android:layout_weight="1"
+                    android:padding="1dp"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginTop="@dimen/activity_margin"
+                    android:scaleType="fitXY"
+                    />
+
+                <TextView
+                    android:id="@+id/tvUpdate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_margin"
+                    android:layout_marginRight="@dimen/activity_margin"
+                    android:background="@drawable/rounded_button"
+                    android:elevation="@dimen/button_elevation"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:padding="@dimen/button_padding"
+                    android:text="@string/activity_button_update"
+                    android:textColor="@color/text_color_white"
+                    android:textSize="@dimen/text_size_extra_large"
+                    android:textStyle="bold"/>
+
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

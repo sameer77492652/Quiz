@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+>
+
+    <ImageView
+        android:id="@+id/ivTopper"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        android:src="@drawable/trophy"
+        android:padding="@dimen/activity_margin"
+        android:scaleType="centerCrop"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/activity_margin_small"
+        android:layout_marginLeft="@dimen/activity_margin"
+        android:layout_marginStart="@dimen/activity_margin"
+        android:layout_marginTop="@dimen/activity_margin_small"
+        android:layout_toEndOf="@id/ivTopper"
+        android:layout_toRightOf="@+id/ivTopper"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvWinnerName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sudhanshu Sharma"
+            android:textColor="@color/app_text_color_dark"
+            android:textSize="@dimen/text_size_large"
+            android:textStyle="bold"
+        />
+    </RelativeLayout>
+</RelativeLayout>

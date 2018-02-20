@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    android:id="@+id/clMain"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:background="@drawable/gradient_backrgound"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvThanku"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:text="THANK YOU"
+            android:textColor="@color/text_color_white"
+            android:textSize="30dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvThanku"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/rounded_button"
+            android:elevation="@dimen/button_elevation"
+            android:gravity="center"
+            android:padding="@dimen/button_padding"
+            android:text="Go To Dashboard"
+            android:textColor="@color/text_color_white"
+            android:textSize="@dimen/text_size_extra_large"
+            android:textStyle="bold" />
+
+
+
+    </RelativeLayout>
+  </android.support.design.widget.CoordinatorLayout>
