@@ -8,16 +8,12 @@ public class UserDetailsPref {
     public static String USER_NAME = "user_name";
     public static String USER_EMAIL = "user_email";
     public static String USER_MOBILE = "user_mobile";
-    public static String USER_LOGIN_KEY = "user_login_key";
-    public static String USER_FIREBASE_ID = "user_firebase_id";
-    public static String USER_IMAGE = "user_image";
-    public static String USER_FACEBOOK_ID = "user_facebook_id";
-    public static String USER_LINKEDIN_ID = "user_linkedin_id";
     public static String USER_TOTAL_AMOUNT = "user_total_amount";
     public static String LANGUAGE_TYPE = "language_type";
     public static String PROFILE = "profile";
     public static String DOB = "dob";
     public static String GENDER = "gender";
+        public static String RESPONSE = "response";
     private static UserDetailsPref userDetailsPref;
     private String USER_DETAILS = "USER_DETAILS";
     

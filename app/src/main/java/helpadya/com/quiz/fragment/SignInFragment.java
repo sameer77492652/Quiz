@@ -35,6 +35,7 @@ import java.util.Map;
 
 import helpadya.com.quiz.R;
 import helpadya.com.quiz.activity.MainActivity;
+import helpadya.com.quiz.activity.MainActivityNew;
 import helpadya.com.quiz.utils.AppConfigTags;
 import helpadya.com.quiz.utils.AppConfigURL;
 import helpadya.com.quiz.utils.Constants;
@@ -216,7 +217,7 @@ public class SignInFragment extends Fragment{
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.GENDER, jsonObj.getString (AppConfigTags.GENDER));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.PROFILE, jsonObj.getString (AppConfigTags.PROFILE));
                                         //Intent intentMyDashboard = new Intent(getActivity(), MyDashboardActivity.class);
-                                        Intent intentMyDashboard = new Intent(getActivity(), MainActivity.class);
+                                        Intent intentMyDashboard = new Intent(getActivity(), MainActivityNew.class);
                                         startActivity(intentMyDashboard);
                                         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                                     } else {

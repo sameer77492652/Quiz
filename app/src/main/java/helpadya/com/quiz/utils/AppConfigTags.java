@@ -52,6 +52,7 @@ public class AppConfigTags {
 
 
     public static String SCORELIST = "scorelist";
+    public static String FAQLIST = "faqlist";
     public static String USER_SCORE = "user_score";
 
     public static String QUESTION_ENGLISH = "question_english";

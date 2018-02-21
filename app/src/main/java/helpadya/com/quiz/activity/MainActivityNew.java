@@ -64,7 +64,6 @@ import helpadya.com.quiz.R;
 import helpadya.com.quiz.model.Banner;
 import helpadya.com.quiz.model.Option;
 import helpadya.com.quiz.model.OptionNew;
-import helpadya.com.quiz.model.Question;
 import helpadya.com.quiz.model.QuestionNew;
 import helpadya.com.quiz.model.ScoreList;
 import helpadya.com.quiz.utils.AppConfigTags;
@@ -78,7 +77,6 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
     ArrayList<Banner> bannerArrayList = new ArrayList<Banner>();
     private SliderLayout slider;
     Bundle savedInstanceState;
-    ArrayList<Question> questionList = new ArrayList<>();
     ArrayList<QuestionNew> questionListNew = new ArrayList<>();
     public static ArrayList<ScoreList> scoreList = new ArrayList<>();
     TextView tvQues;
@@ -107,6 +105,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
     TextView tvStartQuizHindi;
     TextView tvSkipQuestion;
     TextView tvQuiz;
+    JSONArray jsonArrayFaq;
     ProgressDialog progressDialog;
     CoordinatorLayout clMain;
     UserDetailsPref userDetailsPref;
@@ -121,7 +120,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         initView();
         initData();
         isLogin();
-        getQuestionlist();
+        
         getQuestionlistNew();
         initSlider();
         initListener();
@@ -181,14 +180,14 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
             @Override
             public void onClick(View view) {
                 //if(k == questionList.size() - 1){
-                if (count == (questionListNew.size() / 2) - 1) {
+                if (count == (questionListNew.size()) - 1) {
                     yourCountDownTimer.cancel();
                     Intent intent = new Intent(MainActivityNew.this, ThankuActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                 } else {
-                    if (k > (questionListNew.size() / 2) - 1) {
-                        k = (questionListNew.size() / 2) + count;
+                    if (k > (questionListNew.size()) - 1) {
+                        k = (questionListNew.size()) + count;
                     } else {
                         k = count;
                     }
@@ -212,7 +211,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                 tvSkipQuestion.setText(getResources().getText(R.string.activity_skip));
                 tvEnglish.setBackgroundColor(getResources().getColor(R.color.mb_green_new));
                 tvHindi.setBackgroundColor(getResources().getColor(R.color.text_color_red));
-                if (count == (questionListNew.size() / 2) - 1) {
+                if (count == (questionListNew.size()) - 1) {
                     yourCountDownTimer.cancel();
                     Intent intent = new Intent(MainActivityNew.this, ThankuActivity.class);
                     startActivity(intent);
@@ -351,101 +350,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
 
         finish();
     }
-
-    private void getQuestionlist() {
-        if (NetworkConnection.isNetworkAvailable(MainActivityNew.this)) {
-            Utils.showProgressDialog(progressDialog, getResources().getString(R.string.progress_dialog_text_please_wait), true);
-            Utils.showLog(Log.INFO, "" + AppConfigTags.URL, AppConfigURL.URL_QUESTION, true);
-            StringRequest strRequest1 = new StringRequest(Request.Method.GET, AppConfigURL.URL_QUESTION,
-                    new com.android.volley.Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Utils.showLog(Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
-                            if (response != null) {
-                                try {
-                                    JSONObject jsonObj = new JSONObject(response);
-                                    boolean error = jsonObj.getBoolean(AppConfigTags.ERROR);
-                                    String message = jsonObj.getString(AppConfigTags.MESSAGE);
-                                    if (!error) {
-                                        questionList.clear();
-                                        JSONArray jsonArrayQuestion = jsonObj.getJSONArray(AppConfigTags.QUESTION);
-                                        for (int i = 0; i < jsonArrayQuestion.length(); i++) {
-                                            JSONObject jsonObjQuestion = jsonArrayQuestion.getJSONObject(i);
-                                            Question question = new Question();
-                                            question.setId(jsonObjQuestion.getInt(AppConfigTags.ID));
-                                            question.setQuestion_id(jsonObjQuestion.getInt(AppConfigTags.QUESTION_ID));
-                                            question.setQuestion_points(jsonObjQuestion.getInt(AppConfigTags.QUESTION_POINTS));
-                                            question.setLanguage_id(jsonObjQuestion.getInt(AppConfigTags.LANGUAGE_ID));
-                                            //question.setQuestion(jsonObjQuestion.getString(AppConfigTags.QUESTION_NAME));
-                                            question.setQuestion(new String(jsonObjQuestion.getString(AppConfigTags.QUESTION_NAME).getBytes("ISO-8859-1"), "UTF-8"));
-
-                                            JSONArray jsonArrayOption = jsonObjQuestion.getJSONArray(AppConfigTags.OPTION);
-                                            for (int j = 0; j < jsonArrayOption.length(); j++) {
-                                                JSONObject jsonObjOption = jsonArrayOption.getJSONObject(j);
-                                                Option option = new Option();
-                                                option.setId(jsonObjOption.getInt(AppConfigTags.ID));
-                                                option.setQuestion_id(jsonObjOption.getInt(AppConfigTags.QUESTION_ID));
-                                                option.setLanguage_id(jsonObjOption.getInt(AppConfigTags.LANGUAGE_ID));
-                                                option.setOption_id(jsonObjOption.getInt(AppConfigTags.OPTION_ID));
-                                                option.setStatus(jsonObjOption.getInt(AppConfigTags.STATUS));
-                                                //  option.setOption(jsonObjOption.getString(AppConfigTags.OPTION));
-                                                option.setOption(new String(jsonObjOption.getString(AppConfigTags.OPTION).getBytes("ISO-8859-1"), "UTF-8"));
-                                                question.addQuestionOption(option);
-                                                //optionList.add(option);
-                                            }
-                                            questionList.add(question);
-                                        }
-                                        JSONArray jsonArrayScoreList = jsonObj.getJSONArray(AppConfigTags.SCORELIST);
-                                        for(int k = 0; k < jsonArrayScoreList.length(); k++){
-                                            JSONObject jsonObjectScoreList = jsonArrayScoreList.getJSONObject(k);
-                                            scoreList.add(new ScoreList(jsonObjectScoreList.getInt(AppConfigTags.ID),
-                                                    jsonObjectScoreList.getInt(AppConfigTags.USER_SCORE),
-                                                    jsonObjectScoreList.getString(AppConfigTags.USER_NAME)
-                                                    )
-                                            );
-                                        }
-
-                                        //questionListOption();
-                                    } else {
-                                        Utils.showSnackBar(MainActivityNew.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
-                                    }
-                                    progressDialog.dismiss();
-                                } catch (Exception e) {
-                                    progressDialog.dismiss();
-                                    Utils.showSnackBar(MainActivityNew.this, clMain, getResources().getString(R.string.snackbar_text_exception_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                Utils.showSnackBar(MainActivityNew.this, clMain, getResources().getString(R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
-                                Utils.showLog(Log.WARN, AppConfigTags.SERVER_RESPONSE, AppConfigTags.DIDNT_RECEIVE_ANY_DATA_FROM_SERVER, true);
-                            }
-                            progressDialog.dismiss();
-                            //swipeRefreshLayout.setRefreshing (false);
-                        }
-                    },
-                    new com.android.volley.Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // swipeRefreshLayout.setRefreshing (false);
-                            progressDialog.dismiss();
-                            Utils.showLog(Log.ERROR, AppConfigTags.VOLLEY_ERROR, error.toString(), true);
-                            Utils.showSnackBar(MainActivityNew.this, clMain, getResources().getString(R.string.snackbar_text_error_occurred), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_dismiss), null);
-                        }
-                    }) {
-
-            };
-            Utils.sendRequest(strRequest1, 60);
-        } else {
-            Utils.showSnackBar(this, clMain, getResources().getString(R.string.snackbar_text_no_internet_connection_available), Snackbar.LENGTH_LONG, getResources().getString(R.string.snackbar_action_go_to_settings), new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent dialogIntent = new Intent(Settings.ACTION_SETTINGS);
-                    dialogIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(dialogIntent);
-                }
-            });
-        }
-    }
+    
 
     private void getQuestionlistNew() {
         if (NetworkConnection.isNetworkAvailable(MainActivityNew.this)) {
@@ -456,6 +361,8 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                         @Override
                         public void onResponse(String response) {
                             Utils.showLog(Log.INFO, AppConfigTags.SERVER_RESPONSE, response, true);
+                            userDetailsPref.putStringPref(MainActivityNew.this, UserDetailsPref.RESPONSE
+                            ,response);
                             if (response != null) {
                                 try {
                                     JSONObject jsonObj = new JSONObject(response);
@@ -482,6 +389,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                                                 questionNew.addQuestionOptionNew(optionNew);
                                             }
                                             questionListNew.add(questionNew);
+
                                         }
                                     } else {
                                         Utils.showSnackBar(MainActivityNew.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
@@ -537,6 +445,8 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
             }
         }*/
 
+        Log.e("Size",""+questionListNew.size());
+
         for(int i = 0; i < questionListNew.size(); i++){
                 Log.e("QUestion", questionListNew.get(i).getQuestion_english());
                 for(int j = 0; j < questionListNew.get(i).getQuestionOptionListNew().size(); j++){
@@ -544,16 +454,13 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                 }
         }
         for (int i = 0; i < 3; i++) {
-            if (questionList.get(k).getQuestionOptionList().get(i).getStatus() == 1) {
-                correctvalue = questionList.get(k).getQuestionOptionList().get(i).getOption();
+            if (questionListNew.get(k).getQuestionOptionListNew().get(i).getId() == questionListNew.get(k).getCorrect_id()) {
+                correctvalue = questionListNew.get(k).getQuestionOptionListNew().get(i).getOption();
             }
         }
-        //tvSkipQuestion.setFocusable(true);
-        //tvSkipQuestion.setClickable(true);
-        //tvSkipQuestion.setFocusableInTouchMode(true);
         final int j = 0;
         double amount = count + 1;
-        double total_question = questionList.size() / 2;
+        double total_question = questionListNew.size();
         pieView.setInnerText(((amount / total_question) * 100.0f) + "%");
         Log.e("Percentage", "" + ((amount / total_question) * 100.0f));
         pieView.setPercentageTextSize(Utils.pxFromDp(MainActivityNew.this, 8));
@@ -572,86 +479,16 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvOptionA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*tvOptionB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionC.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });*/
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                tvOptionB.setClickable(true);
-                tvOptionB.setFocusableInTouchMode(true);
-                tvOptionC.setFocusable(true);
-                tvOptionC.setClickable(true);
-                tvOptionC.setFocusableInTouchMode(true);
-                tvOptionD.setFocusable(true);
-                tvOptionD.setClickable(true);
-                tvOptionD.setFocusableInTouchMode(true);
+                Log.e("question Option ID",""+questionListNew.get(k).getQuestionOptionListNew().get(j).getId());
+                Log.e("question Correct ID",""+questionListNew.get(k).getCorrect_id());
+
                 if (questionListNew.get(k).getQuestionOptionListNew().get(j).getId() == questionListNew.get(k).getCorrect_id()) {
                     tvOptionA.setBackground(getResources().getDrawable(R.drawable.rounded_corner_green));
                     tvOptionA.setPadding(10, 10, 10, 10);
                     if (userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) != 0) {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + Integer.parseInt(questionListNew.get(k).getPoints()));
                     } else {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, Integer.parseInt(questionListNew.get(k).getPoints()));
                     }
                     handle("" + getResources().getText(R.string.activity_correct_answer)+" "+ questionListNew.get(k).getPoints());
                 } else {
@@ -664,87 +501,15 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvOptionB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*tvOptionA.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionC.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });*/
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                tvOptionA.setFocusable(true);
-                tvOptionA.setClickable(true);
-                tvOptionA.setFocusableInTouchMode(true);
-                tvOptionC.setFocusable(true);
-                tvOptionC.setClickable(true);
-                tvOptionC.setFocusableInTouchMode(true);
-                tvOptionD.setFocusable(true);
-                tvOptionD.setClickable(true);
-                tvOptionD.setFocusableInTouchMode(true);
-                if (questionListNew.get(k).getQuestionOptionListNew().get(j).getId() == questionListNew.get(k).getCorrect_id()) {
+                Log.e("question Option ID",""+questionListNew.get(k).getQuestionOptionListNew().get(j).getId());
+                Log.e("question Correct ID",""+questionListNew.get(k).getCorrect_id());
+                if (questionListNew.get(k).getQuestionOptionListNew().get(j+1).getId() == questionListNew.get(k).getCorrect_id()) {
                     tvOptionB.setBackground(getResources().getDrawable(R.drawable.rounded_corner_green));
                     tvOptionB.setPadding(10, 10, 10, 10);
                     if (userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) != 0) {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + Integer.parseInt(questionListNew.get(k).getPoints()));
                     } else {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, Integer.parseInt(questionListNew.get(k).getPoints()));
                     }
                     handle("" + getResources().getText(R.string.activity_correct_answer)+" "+questionListNew.get(k).getPoints());
                 } else {
@@ -757,90 +522,15 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvOptionC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                tvSkipQuestion.setFocusable(false);
-//                tvSkipQuestion.setClickable(false);
-//                tvSkipQuestion.setFocusableInTouchMode(false);
-                /*tvOptionB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionA.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });*/
-                getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                tvOptionB.setFocusable(true);
-                tvOptionB.setClickable(true);
-                tvOptionB.setFocusableInTouchMode(true);
-                tvOptionA.setFocusable(true);
-                tvOptionA.setClickable(true);
-                tvOptionA.setFocusableInTouchMode(true);
-                tvOptionD.setFocusable(true);
-                tvOptionD.setClickable(true);
-                tvOptionD.setFocusableInTouchMode(true);
-                if (questionListNew.get(k).getQuestionOptionListNew().get(j).getId() == questionListNew.get(k).getCorrect_id()) {
+                Log.e("question Option ID",""+questionListNew.get(k).getQuestionOptionListNew().get(j).getId());
+                Log.e("question Correct ID",""+questionListNew.get(k).getCorrect_id());
+                if (questionListNew.get(k).getQuestionOptionListNew().get(j+2).getId() == questionListNew.get(k).getCorrect_id()) {
                     tvOptionC.setBackground(getResources().getDrawable(R.drawable.rounded_corner_green));
                     tvOptionC.setPadding(10, 10, 10, 10);
                     if (userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) != 0) {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + Integer.parseInt(questionListNew.get(k).getPoints()));
                     } else {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, Integer.parseInt(questionListNew.get(k).getPoints()));
                     }
                     handle("" + getResources().getText(R.string.activity_correct_answer)+" " +questionListNew.get(k).getPoints());
                 } else {
@@ -854,90 +544,17 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvOptionD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                tvSkipQuestion.setFocusable(false);
-//                tvSkipQuestion.setClickable(false);
-//                tvSkipQuestion.setFocusableInTouchMode(false);
-                /*tvOptionB.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionC.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });
-                tvOptionA.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (count == (questionList.size() / 2) - 1) {
-                            yourCountDownTimer.cancel();
-                            Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        } else {
-                            if (k > (questionList.size() / 2) - 1) {
-                                k = (questionList.size() / 2) + count;
-                            } else {
-                                k = count;
-                            }
-                            k++;
-                            count++;
-                            questionListOption();
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                    }
-                });*/
+                Log.e("question Option ID",""+questionListNew.get(k).getQuestionOptionListNew().get(j).getId());
+                Log.e("question Correct ID",""+questionListNew.get(k).getCorrect_id());
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                tvOptionB.setFocusable(true);
-                tvOptionB.setClickable(true);
-                tvOptionB.setFocusableInTouchMode(true);
-                tvOptionC.setFocusable(true);
-                tvOptionC.setClickable(true);
-                tvOptionC.setFocusableInTouchMode(true);
-                tvOptionA.setFocusable(true);
-                tvOptionA.setClickable(true);
-                tvOptionA.setFocusableInTouchMode(true);
-                if (questionListNew.get(k).getQuestionOptionListNew().get(j).getId() == questionListNew.get(k).getCorrect_id()) {
+                if (questionListNew.get(k).getQuestionOptionListNew().get(j+3).getId() == questionListNew.get(k).getCorrect_id()) {
                     tvOptionD.setBackground(getResources().getDrawable(R.drawable.rounded_corner_green));
                     tvOptionD.setPadding(10, 10, 10, 10);
                     if (userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) != 0) {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT) + Integer.parseInt(questionListNew.get(k).getPoints()));
                     } else {
-                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, questionList.get(k).getQuestion_points());
+                        userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT, Integer.parseInt(questionListNew.get(k).getPoints()));
                     }
                     handle("" + getResources().getText(R.string.activity_correct_answer)+" " + questionListNew.get(k).getPoints());
                 } else {
@@ -966,7 +583,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         //if(k == questionList.size() - 1){
-                        if (count == (questionListNew.size() / 2) - 1) {
+                        if (count == questionListNew.size() - 1) {
                             yourCountDownTimer.cancel();
                             Intent intent = new Intent(MainActivityNew.this, ThankuActivity.class);
                             startActivity(intent);
@@ -992,7 +609,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
             @Override
             public void onFinish() {
                 //if(k == questionList.size() - 1){
-                if (count == (questionListNew.size() / 2) - 1) {
+                if (count == questionListNew.size() - 1) {
                     Intent intent = new Intent(MainActivityNew.this, ThankuActivity.class);
                     startActivity(intent);
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -1020,15 +637,6 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                /*if(k == questionList.size() - 1){
-                    Intent intent = new Intent(MainActivity.this, ThankuActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
-                }else {
-                    k++;
-                    questionListOption();
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                }*/
                 dialogMessage(value);
             }
         }, 100);
@@ -1228,10 +836,9 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                                 break;
 
                             case 3:
-                                /*Intent intentContactUs = new Intent(MainActivity.this, ContactUsActivity.class);
-                                startActivity(intentContactUs);
+                                Intent intentFaq = new Intent(MainActivityNew.this, FaqActivity.class);
+                                startActivity(intentFaq);
                                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                                */
                                 break;
 
                             case 4:
