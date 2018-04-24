@@ -34,7 +34,6 @@ import java.util.Hashtable;
 import java.util.Map;
 
 import helpadya.com.quiz.R;
-import helpadya.com.quiz.activity.MainActivity;
 import helpadya.com.quiz.activity.MainActivityNew;
 import helpadya.com.quiz.utils.AppConfigTags;
 import helpadya.com.quiz.utils.AppConfigURL;
@@ -96,7 +95,7 @@ public class SignInFragment extends Fragment{
         tvSkipSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mainActivity = new Intent(getActivity(), MainActivity.class);
+                Intent mainActivity = new Intent(getActivity(), MainActivityNew.class);
                 startActivity(mainActivity);
                 getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             }
@@ -215,8 +214,9 @@ public class SignInFragment extends Fragment{
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.USER_MOBILE, jsonObj.getString (AppConfigTags.MOBILE));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.DOB, jsonObj.getString (AppConfigTags.DOB));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.GENDER, jsonObj.getString (AppConfigTags.GENDER));
+                                        userDetailsPref.putIntPref (getActivity (), UserDetailsPref.USER_TOTAL_AMOUNT, jsonObj.getInt (AppConfigTags.SCORE));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.PROFILE, jsonObj.getString (AppConfigTags.PROFILE));
-                                        //Intent intentMyDashboard = new Intent(getActivity(), MyDashboardActivity.class);
+                                        userDetailsPref.putIntPref (getActivity (), UserDetailsPref.DAY_OF_YEAR, 0);
                                         Intent intentMyDashboard = new Intent(getActivity(), MainActivityNew.class);
                                         startActivity(intentMyDashboard);
                                         getActivity().overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -249,6 +249,7 @@ public class SignInFragment extends Fragment{
                     Map<String, String> params = new Hashtable<String, String> ();
                     params.put (AppConfigTags.USER_EMAIL, email);
                     params.put (AppConfigTags.USER_PASSWORD, password);
+                    params.put (AppConfigTags.USER_FIREBASE_ID, userDetailsPref.getStringPref(getActivity(), UserDetailsPref.USER_FIREBASE_ID));
                     Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
                     return params;
                 }

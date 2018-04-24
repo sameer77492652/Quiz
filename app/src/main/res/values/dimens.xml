@@ -41,7 +41,7 @@
     <dimen name="button_elevation">2dp</dimen>
     <dimen name="cardview_elevation">2dp</dimen>
 
-    <dimen name="home_slider_height">170dp</dimen>
+    <dimen name="home_slider_height">160dp</dimen>
 
     <dimen name="cardview_radius">10dp</dimen>
 

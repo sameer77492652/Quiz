@@ -11,8 +11,10 @@ public class UserDetailsPref {
     public static String USER_TOTAL_AMOUNT = "user_total_amount";
     public static String LANGUAGE_TYPE = "language_type";
     public static String PROFILE = "profile";
+    public static String USER_FIREBASE_ID = "user_firebase_id";
     public static String DOB = "dob";
     public static String GENDER = "gender";
+    public static String DAY_OF_YEAR = "day_of_year";
         public static String RESPONSE = "response";
     private static UserDetailsPref userDetailsPref;
     private String USER_DETAILS = "USER_DETAILS";

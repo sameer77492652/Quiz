@@ -229,7 +229,7 @@ public class ProfileUpdateActivity extends AppCompatActivity{
                                         userDetailsPref.putStringPref (ProfileUpdateActivity.this, UserDetailsPref.DOB, jsonObj.getString (AppConfigTags.DOB));
                                         userDetailsPref.putStringPref (ProfileUpdateActivity.this, UserDetailsPref.GENDER, jsonObj.getString (AppConfigTags.GENDER));
                                         userDetailsPref.putStringPref (ProfileUpdateActivity.this, UserDetailsPref.PROFILE, jsonObj.getString (AppConfigTags.PROFILE));
-                                        Intent intent = new Intent (ProfileUpdateActivity.this, MainActivity.class);
+                                        Intent intent = new Intent (ProfileUpdateActivity.this, MainActivityNew.class);
                                         intent.setFlags (Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity (intent);
                                         ProfileUpdateActivity.this.overridePendingTransition (R.anim.slide_in_right, R.anim.slide_out_left);
@@ -330,7 +330,7 @@ public class ProfileUpdateActivity extends AppCompatActivity{
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(ProfileUpdateActivity.this, MainActivity.class);
+        Intent intent = new Intent(ProfileUpdateActivity.this, MainActivityNew.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         finish();

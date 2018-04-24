@@ -143,15 +143,14 @@ android:animateLayoutChanges="true"
                 android:background="@color/text_color_black"
                 />
 
-            <RelativeLayout
+            <!--<RelativeLayout
                 android:id="@+id/rlQuiz"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/v1"
-                android:layout_marginTop="10dp"
                 android:layout_centerInParent="true"
                 android:animateLayoutChanges="true"
-                android:visibility="gone">
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/tvQuiz"
@@ -198,7 +197,8 @@ android:animateLayoutChanges="true"
                     android:gravity="center"
                     android:layout_marginLeft="140dp"
                     android:layout_marginTop="110dp"
-                    android:weightSum="2">
+                    android:weightSum="2"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/tvEnglish"
@@ -239,8 +239,9 @@ android:animateLayoutChanges="true"
                 <TextView
                     android:id="@+id/tvQues"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Ques 1- What is Your Name?"
+                    android:layout_height="60dp"
+                    android:text="Ques 1- Who is the first cricketer to score 200 in one day international?"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:textColor="@color/app_text_color_dark"
                     android:textStyle="bold"
@@ -250,7 +251,63 @@ android:animateLayoutChanges="true"
                     android:layout_below="@+id/tvTimer"
                     />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/tvOptionA"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/tvQues"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionB"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/tvQues"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:layout_toRightOf="@+id/tvOptionA"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="10dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionC"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/tvOptionA"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionD"
+                    android:layout_width="170dp"
+                    android:layout_height="60dp"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:layout_below="@+id/tvOptionB"
+                    android:layout_toRightOf="@+id/tvOptionC"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                &lt;!&ndash;<LinearLayout
                     android:id="@+id/llfirstrow"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -261,21 +318,22 @@ android:animateLayoutChanges="true"
 
                     <TextView
                         android:id="@+id/tvOptionA"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
                         android:textColor="@color/app_text_color_dark"
                         android:gravity="center"
                         android:padding="10dp"
-                        android:layout_margin="10dp"
+                        android:layout_marginLeft="10dp"
                         android:background="@drawable/rounded_corner"
                         android:text="Sudhanshu"
                         android:layout_weight="1"
                         />
                     <TextView
                         android:id="@+id/tvOptionB"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_margin="10dp"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:textColor="@color/app_text_color_dark"
                         android:gravity="center"
                         android:background="@drawable/rounded_corner"
@@ -298,39 +356,42 @@ android:animateLayoutChanges="true"
 
                     <TextView
                         android:id="@+id/tvOptionC"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
                         android:gravity="center"
                         android:textColor="@color/app_text_color_dark"
                         android:background="@drawable/rounded_corner"
                         android:padding="10dp"
                         android:text="Sudhanshu"
-                        android:layout_margin="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
                         android:layout_weight="1"
 
                         />
 
                     <TextView
                         android:id="@+id/tvOptionD"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
+                        android:layout_width="100dp"
+                        android:layout_height="50dp"
                         android:textColor="@color/app_text_color_dark"
-                        android:background="@drawable/rounded_corner"
+                         android:background="@drawable/rounded_corner"
                         android:gravity="center"
                         android:padding="10dp"
                         android:text="Sudhanshu"
-                        android:layout_margin="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="10dp"
                         android:layout_weight="1"
 
                         />
 
-                </LinearLayout>
+                </LinearLayout>&ndash;&gt;
 
                 <TextView
                     android:id="@+id/tvSkipQuestion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/llsecondrow"
+                    android:layout_below="@+id/tvOptionC"
                     android:background="@drawable/gradient_backrgound"
                     android:layout_margin="10dp"
                     android:text="@string/activity_skip"
@@ -339,6 +400,152 @@ android:animateLayoutChanges="true"
                     android:layout_centerHorizontal="true"
                     android:textColor="@color/text_color_white"
                     />
+
+            </RelativeLayout>-->
+
+
+            <RelativeLayout
+                android:id="@+id/rlQuiz"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/v1"
+                android:animateLayoutChanges="true"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tvQuiz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="@string/activity_do_you_know"
+                    android:textSize="28dp"
+                    android:textStyle="bold" />
+
+
+                <az.plainpie.PieView
+                    android:id="@+id/pieView"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_below="@+id/tvQuiz"
+                    plainpie:inner_pie_padding="10"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="10dp"
+                    plainpie:inner_text_visibility="true"
+                    plainpie:percentage="0" />
+
+
+                <TextView
+                    android:id="@+id/tvQuestionPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvQuiz"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:gravity="left"
+                    android:text="@string/activity_point_score"
+                    android:textColor="@color/app_text_color_dark" />
+
+                <TextView
+                    android:id="@+id/tvTimer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvQuestionPoint"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/gradient_backrgound"
+                    android:padding="10dp"
+                    android:text="Timer: 30 SEC"
+                    android:textColor="@color/text_color_white"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvQues"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ques 1- Who is the first cricketer to score 200 in one day international?"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:textStyle="bold"
+                    android:padding="10dp"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_below="@+id/tvTimer"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionA"
+                    android:layout_width="165dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/tvQues"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionB"
+                    android:layout_width="165dp"
+                    android:layout_height="60dp"
+                    android:layout_toRightOf="@+id/tvOptionA"
+                    android:layout_below="@+id/tvQues"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionC"
+                    android:layout_width="165dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/tvOptionA"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/tvOptionD"
+                    android:layout_width="165dp"
+                    android:layout_height="60dp"
+                    android:layout_below="@+id/tvOptionA"
+                    android:text="Sudhanshu"
+                    android:gravity="center"
+                    android:textColor="@color/app_text_color_dark"
+                    android:background="@drawable/rounded_corner"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/tvOptionC"
+                    />
+
+                <TextView
+                    android:id="@+id/tvSkipQuestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvOptionC"
+                    android:background="@drawable/gradient_backrgound"
+                    android:layout_margin="10dp"
+                    android:text="@string/activity_skip"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@color/text_color_white"
+                    />
+
+
 
             </RelativeLayout>
 
@@ -349,7 +556,7 @@ android:animateLayoutChanges="true"
                 android:layout_below="@+id/v1"
                 android:layout_marginTop="10dp"
                 android:animateLayoutChanges="true"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/tvStartQuiz"
@@ -385,8 +592,67 @@ android:animateLayoutChanges="true"
 
                     />
 
+                <LinearLayout
+                    android:layout_width="140dp"
+                    android:layout_height="25dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginLeft="140dp"
+                    android:layout_marginTop="110dp"
+                    android:weightSum="2"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvEnglish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:background="@color/mb_green_new"
+                        android:text="English"
+                        android:textColor="@color/text_color_white"
+                        android:gravity="center"
+                        />
+                    <TextView
+                        android:id="@+id/tvHindi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_color_white"
+                        android:background="@color/text_color_red"
+                        android:layout_weight="1"
+                        android:text="Hindi"
+                        android:gravity="center"
+                        />
+                </LinearLayout>
+
 
             </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlQuizComplete"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_below="@+id/v1"
+                android:layout_marginTop="10dp"
+                android:animateLayoutChanges="true"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="You have already completed quiz for today. You can play quiz tommorrow again"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:background="@drawable/gradient_backrgound"
+                    android:padding="10dp"
+                    android:layout_margin="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_color_white" />
+
+
+            </RelativeLayout>
+
+
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 </RelativeLayout>

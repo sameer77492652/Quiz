@@ -14,7 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import helpadya.com.quiz.R;
-import helpadya.com.quiz.activity.MainActivity;
+import helpadya.com.quiz.activity.MainActivityNew;
 import helpadya.com.quiz.adapter.ScoreListAdapter;
 import helpadya.com.quiz.utils.SimpleDividerItemDecoration;
 import helpadya.com.quiz.utils.UserDetailsPref;
@@ -91,7 +91,7 @@ public class ScorelistDialogFragment extends DialogFragment {
     }
 
     private void initAdapter() {
-       scoreListAdapter = new ScoreListAdapter(getActivity(), MainActivity.scoreList);
+       scoreListAdapter = new ScoreListAdapter(getActivity(), MainActivityNew.scoreList);
         rvScoreList.setAdapter(scoreListAdapter);
         rvScoreList.setHasFixedSize(true);
         rvScoreList.setLayoutManager (new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

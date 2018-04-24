@@ -46,7 +46,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import helpadya.com.quiz.R;
-import helpadya.com.quiz.activity.MainActivity;
+import helpadya.com.quiz.activity.MainActivityNew;
 import helpadya.com.quiz.utils.AppConfigTags;
 import helpadya.com.quiz.utils.AppConfigURL;
 import helpadya.com.quiz.utils.Constants;
@@ -261,8 +261,10 @@ public class SignUpFragment extends Fragment{
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.USER_MOBILE, jsonObj.getString (AppConfigTags.MOBILE));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.DOB, jsonObj.getString (AppConfigTags.DOB));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.GENDER, jsonObj.getString (AppConfigTags.GENDER));
+                                        userDetailsPref.putIntPref (getActivity (), UserDetailsPref.USER_TOTAL_AMOUNT, jsonObj.getInt (AppConfigTags.SCORE));
                                         userDetailsPref.putStringPref (getActivity (), UserDetailsPref.PROFILE, jsonObj.getString (AppConfigTags.PROFILE));
-                                        Intent intent = new Intent (getActivity (), MainActivity.class);
+                                        userDetailsPref.putIntPref (getActivity (), UserDetailsPref.DAY_OF_YEAR, 0);
+                                        Intent intent = new Intent (getActivity (), MainActivityNew.class);
                                         intent.setFlags (Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                         startActivity (intent);
                                         getActivity ().overridePendingTransition (R.anim.slide_in_right, R.anim.slide_out_left);
@@ -297,6 +299,7 @@ public class SignUpFragment extends Fragment{
                     params.put (AppConfigTags.USER_EMAIL, email);
                     params.put (AppConfigTags.USER_PASSWORD, password);
                     params.put (AppConfigTags.USER_MOBILE, number);
+                    params.put (AppConfigTags.USER_FIREBASE_ID, userDetailsPref.getStringPref(getActivity(),UserDetailsPref.USER_FIREBASE_ID));
                     Utils.showLog (Log.INFO, AppConfigTags.PARAMETERS_SENT_TO_THE_SERVER, "" + params, true);
                     return params;
                 }

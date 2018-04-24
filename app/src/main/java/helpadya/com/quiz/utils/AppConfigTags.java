@@ -36,6 +36,7 @@ public class AppConfigTags {
     public static String USER_EMAIL = "email";
     public static String USER_PASSWORD = "password";
     public static String USER_MOBILE = "mobile";
+    public static String USER_FIREBASE_ID = "firebase_id";
     public static String PROFILE = "profile";
     public static String DOB = "dob";
     public static String GENDER = "gender";
@@ -54,6 +55,7 @@ public class AppConfigTags {
     public static String SCORELIST = "scorelist";
     public static String FAQLIST = "faqlist";
     public static String USER_SCORE = "user_score";
+    public static String SCORE = "score";
 
     public static String QUESTION_ENGLISH = "question_english";
     public static String QUESTION_HINDI = "question_hindi";

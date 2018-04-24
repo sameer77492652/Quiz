@@ -43,7 +43,7 @@ public class ScoreListActivity extends AppCompatActivity {
     }
 
     private void initAdapter() {
-        scoreListAdapter = new ScoreListAdapter(ScoreListActivity.this, MainActivity.scoreList);
+        scoreListAdapter = new ScoreListAdapter(ScoreListActivity.this, MainActivityNew.scoreList);
         rvScoreList.setAdapter(scoreListAdapter);
         rvScoreList.setHasFixedSize(true);
         rvScoreList.setLayoutManager (new LinearLayoutManager(ScoreListActivity.this, LinearLayoutManager.VERTICAL, false));
@@ -56,11 +56,19 @@ public class ScoreListActivity extends AppCompatActivity {
         ivBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ScoreListActivity.this, MainActivity.class);
+                Intent intent = new Intent(ScoreListActivity.this, MainActivityNew.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(ScoreListActivity.this, MainActivityNew.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        finish();
     }
 
 }

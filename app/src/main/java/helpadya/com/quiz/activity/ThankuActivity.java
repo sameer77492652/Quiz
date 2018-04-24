@@ -59,7 +59,7 @@ public class ThankuActivity extends AppCompatActivity{
             public void onClick(View view) {
                 finish ();
                 sendUpdateDetailsToServer();
-                Intent intent = new Intent(ThankuActivity.this, MainActivity.class);
+                Intent intent = new Intent(ThankuActivity.this, MainActivityNew.class);
                 startActivity(intent);
                 overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
 
@@ -74,6 +74,7 @@ public class ThankuActivity extends AppCompatActivity{
     }
 
     public void initData(){
+        MainActivityNew.status = true;
         userDetailsPref = UserDetailsPref.getInstance();
         progressDialog = new ProgressDialog(this);
         Configuration config = getBaseContext().getResources().getConfiguration();
@@ -100,7 +101,7 @@ public class ThankuActivity extends AppCompatActivity{
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         finish ();
                         sendUpdateDetailsToServer();
-                        Intent intent = new Intent(ThankuActivity.this, MainActivity.class);
+                        Intent intent = new Intent(ThankuActivity.this, MainActivityNew.class);
                         startActivity(intent);
                         overridePendingTransition (R.anim.slide_in_left, R.anim.slide_out_right);
 

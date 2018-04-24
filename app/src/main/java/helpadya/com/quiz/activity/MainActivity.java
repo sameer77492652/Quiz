@@ -36,6 +36,7 @@ import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
 import com.daimajia.slider.library.Tricks.ViewPagerEx;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.iconics.typeface.IIcon;
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initView();
         initData();
         isLogin();
@@ -180,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
                 Locale.setDefault(locale);
                 config.locale = locale;
                 getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-                userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.LANGUAGE_TYPE, english);
+                //userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.LANGUAGE_TYPE, english);
                 tvQuiz.setText(getResources().getText(R.string.activity_do_you_know));
                 tvSkipQuestion.setText(getResources().getText(R.string.activity_skip));
                 rlStartQuiz.setVisibility(View.GONE);
@@ -284,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements BaseSliderView.On
     }
 
     private void initData() {
+        FirebaseMessaging.getInstance().subscribeToTopic("global");
         userDetailsPref = new UserDetailsPref();
         userDetailsPref.putStringPref(MainActivity.this, UserDetailsPref.LANGUAGE_TYPE, english);
         progressDialog = new ProgressDialog(this);

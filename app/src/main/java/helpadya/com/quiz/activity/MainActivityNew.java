@@ -57,6 +57,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
 
 import az.plainpie.PieView;
@@ -91,12 +92,15 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
     ImageView ivNavigation;
     PieView pieView;
     Option optionone;
+    Calendar calendar;
     OptionNew optionNew;
     RelativeLayout rlQuiz;
     RelativeLayout rlStartQuiz;
+    RelativeLayout rlQuizComplete;
     TextView tvStartQuiz;
     TextView tvHindi;
     TextView tvEnglish;
+    int language_id = 0;
     private AccountHeader headerResult = null;
     private Drawer result = null;
     String correctvalue;
@@ -112,6 +116,8 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
     CountDownTimer yourCountDownTimer;
     String english = "en";
     String hindi = "hi";
+    public static boolean status = false;
+    int today = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,8 +126,6 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         initView();
         initData();
         isLogin();
-        
-        getQuestionlistNew();
         initSlider();
         initListener();
         initDrawer();
@@ -145,6 +149,7 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvOptionD = (TextView) findViewById(R.id.tvOptionD);
         rlQuiz = (RelativeLayout) findViewById(R.id.rlQuiz);
         rlStartQuiz = (RelativeLayout) findViewById(R.id.rlStartQuiz);
+        rlQuizComplete = (RelativeLayout) findViewById(R.id.rlQuizComplete);
         tvStartQuiz = (TextView) findViewById(R.id.tvStartQuiz);
         tvQuiz = (TextView) findViewById(R.id.tvQuiz);
         slider = (SliderLayout) findViewById(R.id.slider);
@@ -152,22 +157,40 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
     }
 
     private void initListener() {
-
-
         tvStartQuiz.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.DAY_OF_YEAR) == 0){
+                    userDetailsPref.putIntPref(MainActivityNew.this, UserDetailsPref.DAY_OF_YEAR, today);
+                }
+                language_id = 1;
+                getQuestionlistNew();
                 Configuration config = getBaseContext().getResources().getConfiguration();
                 Locale locale = new Locale(english);
                 Locale.setDefault(locale);
                 config.locale = locale;
                 getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-                userDetailsPref.putStringPref(MainActivityNew.this, UserDetailsPref.LANGUAGE_TYPE, english);
                 tvQuiz.setText(getResources().getText(R.string.activity_do_you_know));
                 tvSkipQuestion.setText(getResources().getText(R.string.activity_skip));
                 rlStartQuiz.setVisibility(View.GONE);
                 rlQuiz.setVisibility(View.VISIBLE);
-                questionListOption();
+            }
+        });
+        tvStartQuizHindi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                language_id = 2;
+                getQuestionlistNew();
+                Configuration config = getBaseContext().getResources().getConfiguration();
+                Locale locale = new Locale(hindi);
+                Locale.setDefault(locale);
+                config.locale = locale;
+                getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+                tvQuiz.setText(getResources().getText(R.string.activity_do_you_know));
+                tvSkipQuestion.setText(getResources().getText(R.string.activity_skip));
+                rlStartQuiz.setVisibility(View.GONE);
+                rlQuiz.setVisibility(View.VISIBLE);
+                //questionListOption();
             }
         });
         ivNavigation.setOnClickListener(new View.OnClickListener() {
@@ -179,7 +202,6 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvSkipQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //if(k == questionList.size() - 1){
                 if (count == (questionListNew.size()) - 1) {
                     yourCountDownTimer.cancel();
                     Intent intent = new Intent(MainActivityNew.this, ThankuActivity.class);
@@ -237,17 +259,28 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
             finish();
     }
 
-    private void initData() {
+    private void initData(){
+        calendar = Calendar.getInstance();
         userDetailsPref = new UserDetailsPref();
-        userDetailsPref.putStringPref(MainActivityNew.this, UserDetailsPref.LANGUAGE_TYPE, english);
         progressDialog = new ProgressDialog(this);
+        today = calendar.get(Calendar.DAY_OF_YEAR);
+        if(today != userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.DAY_OF_YEAR)){
+            status = false;
+        }
+        if(status){
+            rlStartQuiz.setVisibility(View.GONE);
+            rlQuizComplete.setVisibility(View.VISIBLE);
+        }else{
+            rlStartQuiz.setVisibility(View.VISIBLE);
+            rlQuizComplete.setVisibility(View.GONE);
+        }
+
+        userDetailsPref.putStringPref(MainActivityNew.this, UserDetailsPref.LANGUAGE_TYPE, english);
         tvTitle.setText(userDetailsPref.getStringPref(MainActivityNew.this, UserDetailsPref.USER_NAME));
         tvScore.setText("Earned Score: " + userDetailsPref.getIntPref(MainActivityNew.this, UserDetailsPref.USER_TOTAL_AMOUNT));
         pieView.setPercentageBackgroundColor(getResources().getColor(R.color.pie_color_good));
         pieView.setInnerBackgroundColor(getResources().getColor(R.color.primary));
         pieView.setTextColor(getResources().getColor(R.color.text_color_white));
-
-        //Timer();
         bannerArrayList.add(new Banner(1, "Banner", "Image", "https://helpadya.com/img/851491210277banner%202.jpg", "1"));
         bannerArrayList.add(new Banner(2, "Banner", "Image", "https://helpadya.com/img/4091491211282BANNER2.jpg", "2"));
         bannerArrayList.add(new Banner(3, "Banner", "Image", "https://helpadya.com/img/3391491211311banner%204.jpg", "3"));
@@ -347,16 +380,14 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         if (yourCountDownTimer != null) {
             yourCountDownTimer.cancel();
         }
-
         finish();
     }
-    
 
     private void getQuestionlistNew() {
         if (NetworkConnection.isNetworkAvailable(MainActivityNew.this)) {
             Utils.showProgressDialog(progressDialog, getResources().getString(R.string.progress_dialog_text_please_wait), true);
-            Utils.showLog(Log.INFO, "" + AppConfigTags.URL, AppConfigURL.URL_QUESTION_NEW, true);
-            StringRequest strRequest1 = new StringRequest(Request.Method.GET, AppConfigURL.URL_QUESTION_NEW,
+            Utils.showLog(Log.INFO, "" + AppConfigTags.URL, AppConfigURL.URL_QUESTION_NEW+ "/" + language_id, true);
+            StringRequest strRequest1 = new StringRequest(Request.Method.GET, AppConfigURL.URL_QUESTION_NEW+ "/" + language_id,
                     new com.android.volley.Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
@@ -374,8 +405,9 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                                             JSONObject jsonObjQuestion = jsonArrayQuestion.getJSONObject(i);
                                             QuestionNew questionNew = new QuestionNew();
                                             questionNew.setId(jsonObjQuestion.getInt(AppConfigTags.ID));
-                                            questionNew.setQuestion_english(jsonObjQuestion.getString(AppConfigTags.QUESTION_ENGLISH));
-                                            questionNew.setQuestion_hindi(jsonObjQuestion.getString(AppConfigTags.QUESTION_HINDI));
+                                            questionNew.setQuestion_english(new String(jsonObjQuestion.getString(AppConfigTags.QUESTION_ENGLISH).getBytes("ISO-8859-1"), "UTF-8"));
+                                            //questionNew.setQuestion_english(jsonObjQuestion.getString(AppConfigTags.QUESTION_ENGLISH));
+                                            questionNew.setQuestion_hindi("");
                                             questionNew.setCorrect_id(jsonObjQuestion.getInt(AppConfigTags.CORRECT_ID));
                                             questionNew.setPoints(jsonObjQuestion.getString("points"));
 
@@ -385,12 +417,24 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                                                 OptionNew optionNew = new OptionNew();
                                                 optionNew.setId(jsonObjectOption.getInt(AppConfigTags.ID));
                                                 optionNew.setQuestion_id(jsonObjectOption.getInt(AppConfigTags.QUESTION_ID));
-                                                optionNew.setOption(jsonObjectOption.getString(AppConfigTags.OPTION));
+                                                //optionNew.setOption(jsonObjectOption.getString(AppConfigTags.OPTION));
+                                                optionNew.setOption(new String(jsonObjectOption.getString(AppConfigTags.OPTION).getBytes("ISO-8859-1"), "UTF-8"));
                                                 questionNew.addQuestionOptionNew(optionNew);
                                             }
                                             questionListNew.add(questionNew);
 
                                         }
+                                        scoreList.clear();
+                                        JSONArray jsonArrayScoreList = jsonObj.getJSONArray(AppConfigTags.SCORELIST);
+                                        for(int k = 0; k < jsonArrayScoreList.length(); k++){
+                                            JSONObject jsonObjectScoreList = jsonArrayScoreList.getJSONObject(k);
+                                            scoreList.add(new ScoreList(jsonObjectScoreList.getInt(AppConfigTags.ID),
+                                                            jsonObjectScoreList.getInt(AppConfigTags.USER_SCORE),
+                                                            jsonObjectScoreList.getString(AppConfigTags.USER_NAME)
+                                                    )
+                                            );
+                                        }
+                                        questionListOption();
                                     } else {
                                         Utils.showSnackBar(MainActivityNew.this, clMain, message, Snackbar.LENGTH_LONG, null, null);
                                     }
@@ -445,24 +489,22 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
             }
         }*/
 
-        Log.e("Size",""+questionListNew.size());
-
-        for(int i = 0; i < questionListNew.size(); i++){
-                Log.e("QUestion", questionListNew.get(i).getQuestion_english());
-                for(int j = 0; j < questionListNew.get(i).getQuestionOptionListNew().size(); j++){
-                        Log.e("Option", questionListNew.get(i).getQuestionOptionListNew().get(j).getOption());
-                }
-        }
+        /*for(int i = 0; i < questionListNew.size(); i++){
+            Log.e("Question", questionListNew.get(i).getQuestion_english());
+            for(int j = 0; j < questionListNew.get(i).getQuestionOptionListNew().size(); j++){
+                Log.e("Option", questionListNew.get(i).getQuestionOptionListNew().get(j).getOption());
+            }
+        }*/
         for (int i = 0; i < 3; i++) {
             if (questionListNew.get(k).getQuestionOptionListNew().get(i).getId() == questionListNew.get(k).getCorrect_id()) {
                 correctvalue = questionListNew.get(k).getQuestionOptionListNew().get(i).getOption();
+                Log.e("correctvalue", correctvalue);
             }
         }
         final int j = 0;
         double amount = count + 1;
         double total_question = questionListNew.size();
         pieView.setInnerText(((amount / total_question) * 100.0f) + "%");
-        Log.e("Percentage", "" + ((amount / total_question) * 100.0f));
         pieView.setPercentageTextSize(Utils.pxFromDp(MainActivityNew.this, 8));
         pieView.setPercentage((float) ((amount / total_question) * 100.0f));
         tvOptionA.setBackground(getResources().getDrawable(R.drawable.rounded_corner));
@@ -479,9 +521,6 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
         tvOptionA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("question Option ID",""+questionListNew.get(k).getQuestionOptionListNew().get(j).getId());
-                Log.e("question Correct ID",""+questionListNew.get(k).getCorrect_id());
-
                 if (questionListNew.get(k).getQuestionOptionListNew().get(j).getId() == questionListNew.get(k).getCorrect_id()) {
                     tvOptionA.setBackground(getResources().getDrawable(R.drawable.rounded_corner_green));
                     tvOptionA.setPadding(10, 10, 10, 10);
@@ -641,7 +680,6 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
             }
         }, 100);
     }
-
 
     private void initDrawer() {
         IProfile profile = new IProfile() {
@@ -815,13 +853,13 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
 
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home).withIdentifier(1).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
-                        new PrimaryDrawerItem().withName("My Account").withIcon(FontAwesome.Icon.faw_audio_description).withIdentifier(2).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
-                        new PrimaryDrawerItem().withName("Faqs").withIcon(FontAwesome.Icon.faw_info).withIdentifier(3).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
-                        new PrimaryDrawerItem().withName("Refer").withIcon(FontAwesome.Icon.faw_phone).withIdentifier(4).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
+                        new PrimaryDrawerItem().withName("My Account").withIcon(FontAwesome.Icon.faw_user).withIdentifier(2).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
+                        new PrimaryDrawerItem().withName("Faqs").withIcon(FontAwesome.Icon.faw_question).withIdentifier(3).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
+                        new PrimaryDrawerItem().withName("Refer").withIcon(FontAwesome.Icon.faw_share).withIdentifier(4).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
                         new PrimaryDrawerItem().withName("Earned Points").withIcon(FontAwesome.Icon.faw_phone).withIdentifier(5).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
-                        new PrimaryDrawerItem().withName("Winner List").withIcon(FontAwesome.Icon.faw_phone).withIdentifier(8).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
+                        new PrimaryDrawerItem().withName("Winner List").withIcon(FontAwesome.Icon.faw_trophy).withIdentifier(8).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
                         //new PrimaryDrawerItem().withName("Change Password").withIcon(FontAwesome.Icon.faw_key).withIdentifier(5).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivity.this)),
-                        new PrimaryDrawerItem().withName("Enquiry").withIcon(FontAwesome.Icon.faw_sign_out).withIdentifier(7).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
+                        new PrimaryDrawerItem().withName("Enquiry").withIcon(FontAwesome.Icon.faw_phone).withIdentifier(7).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this)),
                         new PrimaryDrawerItem().withName("Sign Out").withIcon(FontAwesome.Icon.faw_sign_out).withIdentifier(6).withSelectable(false).withTypeface(SetTypeFace.getTypeface(MainActivityNew.this))
                 )
                 .withSavedInstance(savedInstanceState)
@@ -920,7 +958,5 @@ public class MainActivityNew extends AppCompatActivity implements BaseSliderView
                 }).build();
         dialog.show();
     }
-
-
 
 }
